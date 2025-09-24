@@ -1,0 +1,58 @@
+import { Student } from '../types';
+
+export const mockStudents: Student[] = [
+  {
+    id: '1',
+    name: 'Alex Johnson',
+    avatar: '🥋',
+    classesCount: 15,
+    lastCheckIn: new Date('2024-01-15'),
+    pin: '1234',
+    isActive: true,
+  },
+  {
+    id: '2',
+    name: 'Sarah Chen',
+    avatar: '🥊',
+    classesCount: 8,
+    lastCheckIn: new Date('2024-01-14'),
+    pin: '5678',
+    isActive: true,
+  },
+  {
+    id: '3',
+    name: 'Mike Rodriguez',
+    avatar: '🦵',
+    classesCount: 12,
+    lastCheckIn: new Date('2024-01-13'),
+    pin: '9012',
+    isActive: true,
+  },
+  {
+    id: '4',
+    name: 'Emma Wilson',
+    avatar: '👊',
+    classesCount: 6,
+    lastCheckIn: new Date('2024-01-12'),
+    pin: '3456',
+    isActive: true,
+  },
+  {
+    id: '5',
+    name: 'David Kim',
+    avatar: '⚡',
+    classesCount: 20,
+    lastCheckIn: new Date('2024-01-15'),
+    pin: '7890',
+    isActive: true,
+  },
+  {
+    id: '6',
+    name: 'Lisa Thompson',
+    avatar: '🔥',
+    classesCount: 9,
+    lastCheckIn: new Date('2024-01-11'),
+    pin: '2468',
+    isActive: true,
+  },
+];
