@@ -15,11 +15,12 @@ export interface AttendanceRecord {
   date: string;
 }
 
-export type BadgeType = 'bronze' | 'silver' | 'gold';
+export type BadgeType = 'bronze' | 'silver' | 'gold' | 'star';
 
 export interface Badge {
   type: BadgeType;
   threshold: number;
   icon: string;
   color: string;
+  imageUrl?: string;
 }

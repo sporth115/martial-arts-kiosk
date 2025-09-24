@@ -19,8 +19,8 @@ const StudentCard: React.FC<StudentCardProps> = ({
   const badge = getBadgeForClassCount(student.classesCount);
   
   // Avatar size based on whether it's a top student
-  const avatarSize = isTopStudent ? '100px' : '60px';
-  const fontSize = isTopStudent ? '64px' : '48px';
+  const avatarSize = isTopStudent ? '200px' : '200px';
+  const fontSize = isTopStudent ? '80px' : '80px';
 
   return (
     <motion.div
@@ -29,34 +29,31 @@ const StudentCard: React.FC<StudentCardProps> = ({
       whileTap={{ scale: 0.95 }}
       onClick={() => onCheckIn(student)}
       style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         borderRadius: '16px',
         padding: '20px',
         textAlign: 'center',
         cursor: 'pointer',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-        border: '2px solid transparent',
         transition: 'all 0.3s ease',
         opacity: isCheckingIn ? 0.7 : 1,
         pointerEvents: isCheckingIn ? 'none' : 'auto',
       }}
     >
-      <motion.div
-        className="avatar"
-        style={{
-          fontSize: (student.avatar.startsWith('http') || student.avatar.startsWith('blob:')) ? 'auto' : fontSize,
-          marginBottom: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: avatarSize,
-        }}
-        animate={isCheckingIn ? { 
-          scale: [1, 1.2, 1],
-          rotate: [0, 5, -5, 0]
-        } : {}}
-        transition={{ duration: 0.6 }}
-      >
+      <div style={{ position: 'relative', marginBottom: '12px' }}>
+        <motion.div
+          className="avatar"
+          style={{
+            fontSize: (student.avatar.startsWith('http') || student.avatar.startsWith('blob:')) ? 'auto' : fontSize,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: avatarSize,
+          }}
+          animate={isCheckingIn ? { 
+            scale: [1, 1.2, 1],
+            rotate: [0, 5, -5, 0]
+          } : {}}
+          transition={{ duration: 0.6 }}
+        >
         {(student.avatar.startsWith('http') || student.avatar.startsWith('blob:')) ? (
           <img
             src={student.avatar}
@@ -66,7 +63,7 @@ const StudentCard: React.FC<StudentCardProps> = ({
               height: avatarSize,
               borderRadius: '50%',
               objectFit: 'cover',
-              border: isTopStudent ? '4px solid rgba(255, 255, 255, 0.9)' : '3px solid rgba(255, 255, 255, 0.8)',
+              border: isTopStudent ? '3px solid rgba(255, 255, 255, 0.9)' : '3px solid rgba(255, 255, 255, 0.8)',
               boxShadow: isTopStudent ? '0 6px 20px rgba(0, 0, 0, 0.4)' : '0 4px 12px rgba(0, 0, 0, 0.3)',
             }}
           />
@@ -78,17 +75,46 @@ const StudentCard: React.FC<StudentCardProps> = ({
             height: avatarSize,
             borderRadius: '50%',
             background: 'rgba(255, 255, 255, 0.2)',
-            border: isTopStudent ? '4px solid rgba(255, 255, 255, 0.6)' : '3px solid rgba(255, 255, 255, 0.5)',
+            border: isTopStudent ? '3px solid rgba(255, 255, 255, 0.6)' : '3px solid rgba(255, 255, 255, 0.5)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: 'rgba(255, 255, 255, 0.8)',
-            fontSize: isTopStudent ? '48px' : '32px',
+            fontSize: isTopStudent ? '60px' : '48px',
           }}>
             ?
           </div>
         )}
       </motion.div>
+      
+      {/* Badge Overlay */}
+      {badge.imageUrl && (
+        <div style={{
+          position: 'absolute',
+          top: '0',
+          right: '0',
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 12px rgba(255, 215, 0, 0.4)',
+          border: '2px solid rgba(255, 255, 255, 0.8)',
+          zIndex: 10,
+        }}>
+          <img
+            src={badge.imageUrl}
+            alt={`${badge.type} badge`}
+            style={{
+              width: '64px',
+              height: '64px',
+              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+            }}
+          />
+        </div>
+      )}
+      </div>
       
       <h3 style={{ 
         color: 'white', 
@@ -104,7 +130,6 @@ const StudentCard: React.FC<StudentCardProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '8px',
         marginBottom: '8px',
       }}>
         <span style={{ 
@@ -114,20 +139,6 @@ const StudentCard: React.FC<StudentCardProps> = ({
         }}>
           {student.classesCount} classes
         </span>
-        <span style={{ fontSize: '20px' }}>
-          {badge.icon}
-        </span>
-      </div>
-      
-      <div style={{
-        background: 'rgba(255,255,255,0.2)',
-        borderRadius: '8px',
-        padding: '4px 8px',
-        fontSize: '12px',
-        color: 'white',
-        fontWeight: '500',
-      }}>
-        {badge.type.toUpperCase()} BADGE
       </div>
     </motion.div>
   );

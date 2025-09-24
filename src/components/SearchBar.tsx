@@ -30,7 +30,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       transition={{ duration: 0.5 }}
       style={{
         width: '100%',
-        maxWidth: '600px',
+        maxWidth: '500px',
         margin: '0 auto 30px auto',
       }}
     >
@@ -45,7 +45,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             style={{
               position: 'absolute',
               left: '16px',
-              color: '#666',
+              color: 'rgba(255, 255, 255, 0.8)',
               zIndex: 1,
             }}
           />
@@ -56,22 +56,26 @@ const SearchBar: React.FC<SearchBarProps> = ({
             placeholder={placeholder}
             style={{
               width: '100%',
-              padding: '16px 16px 16px 56px',
+              padding: '12px 12px 12px 52px',
               fontSize: '18px',
-              border: '2px solid #e1e5e9',
+              border: '2px solid rgba(255, 255, 255, 0.3)',
               borderRadius: '12px',
               outline: 'none',
               transition: 'all 0.3s ease',
-              background: 'white',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              background: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)',
+              color: 'white',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
             }}
             onFocus={(e) => {
-              e.target.style.borderColor = '#667eea';
-              e.target.style.boxShadow = '0 4px 20px rgba(102, 126, 234, 0.2)';
+              e.target.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+              e.target.style.boxShadow = '0 8px 40px rgba(255, 255, 255, 0.3)';
+              e.target.style.background = 'rgba(255, 255, 255, 0.2)';
             }}
             onBlur={(e) => {
-              e.target.style.borderColor = '#e1e5e9';
-              e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+              e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+              e.target.style.boxShadow = '0 8px 32px rgba(0,0,0,0.2)';
+              e.target.style.background = 'rgba(255, 255, 255, 0.1)';
             }}
           />
           {query && (
@@ -92,11 +96,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#666',
+                color: 'rgba(255, 255, 255, 0.8)',
                 transition: 'all 0.2s ease',
               }}
               whileHover={{ 
-                backgroundColor: '#f0f0f0',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
                 scale: 1.1 
               }}
             >
@@ -105,6 +109,24 @@ const SearchBar: React.FC<SearchBarProps> = ({
           )}
         </div>
       </form>
+      
+      {/* CSS for placeholder color */}
+      <style>
+        {`
+          input::placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+          }
+          input::-webkit-input-placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+          }
+          input::-moz-placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+          }
+          input:-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+          }
+        `}
+      </style>
     </motion.div>
   );
 };

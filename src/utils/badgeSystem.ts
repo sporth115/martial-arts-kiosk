@@ -7,6 +7,7 @@ export const getBadgeForClassCount = (classCount: number): Badge => {
       threshold: 12,
       icon: '🥇',
       color: '#FFD700',
+      imageUrl: require('../assets/images/gold.png'),
     };
   } else if (classCount >= 10) {
     return {
@@ -14,6 +15,7 @@ export const getBadgeForClassCount = (classCount: number): Badge => {
       threshold: 10,
       icon: '🥈',
       color: '#C0C0C0',
+      imageUrl: require('../assets/images/silver.png'),
     };
   } else if (classCount >= 8) {
     return {
@@ -21,10 +23,11 @@ export const getBadgeForClassCount = (classCount: number): Badge => {
       threshold: 8,
       icon: '🥉',
       color: '#CD7F32',
+      imageUrl: require('../assets/images/bronze.png'),
     };
   } else {
     return {
-      type: 'bronze',
+      type: 'star',
       threshold: 0,
       icon: '⭐',
       color: '#87CEEB',
