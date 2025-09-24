@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
+import { UserPlus } from 'lucide-react';
 import StudentCard from './StudentCard';
 import SearchBar from './SearchBar';
+import StudentSignUp from './StudentSignUp';
+import Fireworks from './Fireworks';
 import { Student } from '../types';
 import { getTopStudents } from '../utils/badgeSystem';
 import backgroundImage from '../assets/images/background.png';
@@ -11,12 +14,15 @@ interface CheckInKioskProps {
   students: Student[];
   onUpdateStudent: (id: string, updates: Partial<Student>) => void;
   onCheckInStudent: (id: string) => Promise<Student>;
+  onAddStudent: (student: Omit<Student, 'id'>) => Promise<Student>;
 }
 
-const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, onCheckInStudent }) => {
+const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, onCheckInStudent, onAddStudent }) => {
   const [filteredStudents, setFilteredStudents] = useState<Student[]>(students);
   const [searchQuery, setSearchQuery] = useState('');
   const [checkingInStudent, setCheckingInStudent] = useState<string | null>(null);
+  const [showSignUp, setShowSignUp] = useState(false);
+  const [showFireworks, setShowFireworks] = useState(false);
 
   // Get top 5 students for featured display
   const topStudents = getTopStudents(students, 5);
@@ -47,6 +53,9 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
     try {
       // Use the Supabase check-in function
       const updatedStudent = await onCheckInStudent(student.id);
+      
+      // Show fireworks celebration
+      setShowFireworks(true);
       
       // Show success animation and toast
       toast.success(
@@ -109,8 +118,46 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
         style={{
           textAlign: 'center',
           marginBottom: '40px',
+          position: 'relative',
         }}
       >
+        {/* Sign Up Button */}
+        <motion.button
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          onClick={() => setShowSignUp(true)}
+          style={{
+            position: 'absolute',
+            top: '0',
+            right: '0',
+            background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            padding: '12px 20px',
+            color: 'white',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 6px 20px rgba(76, 175, 80, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(76, 175, 80, 0.3)';
+          }}
+        >
+          <UserPlus size={16} />
+          Join Dojo
+        </motion.button>
+
         <h1 style={{
           color: 'white',
           fontSize: 'clamp(2rem, 5vw, 3rem)',
@@ -262,6 +309,22 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
         </motion.div>
       )}
       </div>
+      
+      {/* Student Sign Up Modal */}
+      <AnimatePresence>
+        {showSignUp && (
+          <StudentSignUp
+            onAddStudent={onAddStudent}
+            onClose={() => setShowSignUp(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Fireworks Celebration */}
+      <Fireworks 
+        show={showFireworks}
+        onComplete={() => setShowFireworks(false)}
+      />
       
       {/* CSS for shimmer animation */}
       <style>

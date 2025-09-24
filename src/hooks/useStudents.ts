@@ -87,8 +87,6 @@ export const useStudents = () => {
         )
       );
       
-      const student = students.find(s => s.id === id);
-      toast.success(`${student?.name} checked in successfully! 🥋`);
       return updatedStudent;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to check in student';
@@ -96,7 +94,7 @@ export const useStudents = () => {
       toast.error('Failed to check in student');
       throw err;
     }
-  }, [students]);
+  }, []);
 
   // Load students on mount
   useEffect(() => {

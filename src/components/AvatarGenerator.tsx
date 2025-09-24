@@ -29,7 +29,7 @@ const AvatarGenerator: React.FC<AvatarGeneratorProps> = ({ onAvatarGenerated, on
         'creative interpretation', 'artistic rendering', 'distinctive look'
       ];
       const randomVariation = randomVariations[Math.floor(Math.random() * randomVariations.length)];
-      const variedPrompt = `${prompt.trim()}, ${randomVariation}, timestamp ${timestamp}`;
+      const variedPrompt = `${prompt.trim()}, ${randomVariation}`;
       
       // Encode the varied prompt for URL
       const encodedPrompt = encodeURIComponent(variedPrompt);

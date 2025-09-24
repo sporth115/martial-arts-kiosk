@@ -66,6 +66,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
               backdropFilter: 'blur(10px)',
               color: 'white',
               boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+              boxSizing: 'border-box',
             }}
             onFocus={(e) => {
               e.target.style.borderColor = 'rgba(255, 255, 255, 0.8)';

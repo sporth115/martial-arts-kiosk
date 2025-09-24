@@ -124,6 +124,7 @@ function App() {
           students={students}
           onUpdateStudent={updateStudent}
           onCheckInStudent={checkInStudent}
+          onAddStudent={addStudent}
         />
       ) : (
         <AdminPanel
