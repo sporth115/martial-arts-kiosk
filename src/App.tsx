@@ -71,14 +71,14 @@ function App() {
           fontWeight: 'bold',
           textAlign: 'center',
         }}>
-          Loading Dojo...
+          Loading...
         </div>
         <div style={{
           fontSize: '16px',
           opacity: 0.8,
           textAlign: 'center',
         }}>
-          Preparing your martial arts kiosk
+          Loading...
         </div>
         
         {/* CSS for spinner animation */}
