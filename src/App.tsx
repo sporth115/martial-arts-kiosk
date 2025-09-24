@@ -73,13 +73,6 @@ function App() {
         }}>
           Loading...
         </div>
-        <div style={{
-          fontSize: '16px',
-          opacity: 0.8,
-          textAlign: 'center',
-        }}>
-          Loading...
-        </div>
         
         {/* CSS for spinner animation */}
         <style>

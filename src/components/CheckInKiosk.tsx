@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { Student } from '../types';
-import { getTopStudents } from '../utils/badgeSystem';
 
 interface CheckInKioskProps {
   students: Student[];
@@ -10,27 +9,7 @@ interface CheckInKioskProps {
   onCheckInStudent: (id: string) => Promise<Student>;
 }
 
-const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, onCheckInStudent }) => {
-  const [_, setFilteredStudents] = useState<Student[]>(students);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [checkingInStudent, setCheckingInStudent] = useState<string | null>(null);
-
-  // Get top 5 students for featured display
-
-  useEffect(() => {
-    if (searchQuery.trim() === '') {
-      // When no search query, show all students (including top 5)
-      setFilteredStudents(students.filter(student => student.isActive));
-    } else {
-      // When searching, show all matching students (including top 5 if they match)
-      const filtered = students.filter(student =>
-        student.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        student.isActive
-      );
-      setFilteredStudents(filtered);
-    }
-  }, [searchQuery, students]);
-
+const CheckInKiosk: React.FC<CheckInKioskProps> = () => {
   return (
     <div style={{
       minHeight: '100vh',

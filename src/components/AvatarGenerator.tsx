@@ -35,16 +35,12 @@ const AvatarGenerator: React.FC<AvatarGeneratorProps> = ({ onAvatarGenerated, on
       const encodedPrompt = encodeURIComponent(variedPrompt);
       
       // Build the API URL with cache-busting parameters
-      const apiUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&model=flux&nologo=true&private=true&seed=${randomSeed}&t=${timestamp}&nocache=${timestamp}`;
+      const apiUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&model=flux&noLogo=true&private=true&seed=${randomSeed}&t=${timestamp}&nocache=${timestamp}`;
       
-      // Get the bearer token from environment variables
-      const token = process.env.REACT_APP_POLLINATIONS_TOKEN;
-      
+      // Pollinations API doesn't support custom headers due to CORS restrictions
+      // We'll make a simple GET request without any custom headers
       const response = await fetch(apiUrl, {
         method: 'GET',
-        headers: {
-          ...(token && { 'Authorization': `Bearer ${token}` }),
-        },
       });
 
       if (!response.ok) {
