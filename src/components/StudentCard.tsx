@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Student } from '../types';
 import { getBadgeForClassCount } from '../utils/badgeSystem';
@@ -19,6 +19,7 @@ const StudentCard: React.FC<StudentCardProps> = ({
   isTopStudent = false,
   isTappable = true
 }) => {
+  const [showFireworks, setShowFireworks] = useState(false);
   const badge = getBadgeForClassCount(student.classesCount);
   
   // Get border color based on badge level
@@ -41,20 +42,30 @@ const StudentCard: React.FC<StudentCardProps> = ({
   const avatarSize = isTopStudent ? '200px' : '200px';
   const fontSize = isTopStudent ? '80px' : '80px';
 
+  // Handle click with fireworks animation
+  const handleClick = () => {
+    if (isTappable) {
+      setShowFireworks(true);
+      setTimeout(() => setShowFireworks(false), 2000);
+      onCheckIn(student);
+    }
+  };
+
   return (
     <motion.div
       className="student-card"
       whileHover={isTappable ? { scale: 1.05 } : {}}
       whileTap={isTappable ? { scale: 0.95 } : {}}
-      onClick={isTappable ? () => onCheckIn(student) : undefined}
+      onClick={handleClick}
       style={{
-        borderRadius: '16px',
-        padding: '20px',
         textAlign: 'center',
         cursor: isTappable ? 'pointer' : 'default',
         transition: 'all 0.3s ease',
         opacity: isCheckingIn ? 0.7 : 1,
         pointerEvents: isCheckingIn ? 'none' : 'auto',
+        background: 'transparent',
+        border: 'none',
+        padding: '0',
       }}
     >
       <div style={{ position: 'relative', marginBottom: '12px' }}>
@@ -241,43 +252,20 @@ const StudentCard: React.FC<StudentCardProps> = ({
             style={{
               width: avatarSize,
               height: avatarSize,
-              borderRadius: '10%',
               objectFit: 'cover',
-              boxShadow: `
-                0 0 15px ${getBorderColor().replace('0.9', '0.4')},
-                0 0 25px ${getBorderColor().replace('0.9', '0.2')},
-                0 6px 20px rgba(0, 0, 0, 0.3),
-                inset 0 0 15px rgba(255, 255, 255, 0.15)
-              `,
-              filter: 'brightness(1.1) contrast(1.1) saturate(1.2)',
               transition: 'all 0.3s ease',
             }}
           />
         ) : student.avatar ? (
           <div style={{
             fontSize: '60px',
-            filter: `drop-shadow(0 0 8px ${getBorderColor().replace('0.9', '0.5')})`,
-            textShadow: `0 0 12px ${getBorderColor().replace('0.9', '0.6')}`,
           }}>
             {student.avatar}
           </div>
         ) : (
           <div style={{
-            width: avatarSize,
-            height: avatarSize,
-            borderRadius: '50%',
-            background: `linear-gradient(135deg, ${getBorderColor().replace('0.9', '0.3')}, ${getBorderColor().replace('0.9', '0.2')})`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: getBorderColor(),
             fontSize: '60px',
-            boxShadow: `
-              0 0 15px ${getBorderColor().replace('0.9', '0.3')},
-              0 6px 20px rgba(0, 0, 0, 0.25),
-              inset 0 0 15px rgba(255, 255, 255, 0.15)
-            `,
-            textShadow: `0 0 10px ${getBorderColor().replace('0.9', '0.6')}`,
+            color: 'rgba(0, 255, 0, 0.8)',
           }}>
             ?
           </div>
@@ -296,8 +284,8 @@ const StudentCard: React.FC<StudentCardProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 4px 12px rgba(255, 215, 0, 0.4)',
-          border: '2px solid rgba(255, 255, 255, 0.8)',
+          boxShadow: '0 0 15px rgba(0, 255, 0, 0.6), 0 0 25px rgba(0, 255, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)',
+          border: '2px solid rgba(0, 255, 0, 0.5)',
           zIndex: 10,
         }}>
           <img
@@ -306,9 +294,45 @@ const StudentCard: React.FC<StudentCardProps> = ({
             style={{
               width: '64px',
               height: '64px',
-              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+              filter: 'drop-shadow(0 0 10px rgba(0, 255, 0, 0.6)) drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
             }}
           />
+        </div>
+      )}
+      
+      {/* Fireworks Animation */}
+      {showFireworks && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 1000,
+          pointerEvents: 'none',
+        }}>
+          {[...Array(12)].map((_, i) => (
+            <motion.div
+              key={i}
+              style={{
+                position: 'absolute',
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                background: `hsl(${i * 30}, 100%, 60%)`,
+                boxShadow: '0 0 10px currentColor',
+              }}
+              animate={{
+                x: [0, Math.cos(i * 30 * Math.PI / 180) * 100],
+                y: [0, Math.sin(i * 30 * Math.PI / 180) * 100],
+                scale: [1, 0],
+                opacity: [1, 0],
+              }}
+              transition={{
+                duration: 1.5,
+                ease: 'easeOut',
+              }}
+            />
+          ))}
         </div>
       )}
       </div>

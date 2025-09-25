@@ -9,7 +9,7 @@ import Fireworks from './Fireworks';
 import CheckInConfirmation from './CheckInConfirmation';
 import { Student } from '../types';
 import { getTopStudents } from '../utils/badgeSystem';
-import backgroundImage from '../assets/images/background.png';
+import backgroundImage from '../assets/images/background.webp';
 
 interface CheckInKioskProps {
   students: Student[];
