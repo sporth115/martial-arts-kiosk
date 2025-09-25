@@ -22,22 +22,6 @@ const StudentCard: React.FC<StudentCardProps> = ({
   const [showFireworks, setShowFireworks] = useState(false);
   const badge = getBadgeForClassCount(student.classesCount);
   
-  // Get border color based on badge level
-  const getBorderColor = () => {
-    switch (badge.type) {
-      case 'gold':
-        return 'rgba(255, 215, 0, 0.9)'; // Gold
-      case 'silver':
-        return 'rgba(192, 192, 192, 0.9)'; // Silver
-      case 'bronze':
-        return 'rgba(205, 127, 50, 0.9)'; // Bronze
-      case 'star':
-        return 'rgba(135, 206, 235, 0.9)'; // Light blue for star
-      default:
-        return 'rgba(255, 255, 255, 0.8)';
-    }
-  };
-  
   // Avatar size based on whether it's a top student
   const avatarSize = isTopStudent ? '200px' : '200px';
   const fontSize = isTopStudent ? '80px' : '80px';
