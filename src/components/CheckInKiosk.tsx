@@ -30,19 +30,6 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
   // Get top 5 students for featured display
   const topStudents = getTopStudents(students, 5);
 
-  // Check if student has already checked in today
-  const hasCheckedInToday = (student: Student): boolean => {
-    if (!student.lastCheckIn) return false;
-    
-    const today = new Date();
-    const lastCheckIn = new Date(student.lastCheckIn);
-    
-    return (
-      today.getFullYear() === lastCheckIn.getFullYear() &&
-      today.getMonth() === lastCheckIn.getMonth() &&
-      today.getDate() === lastCheckIn.getDate()
-    );
-  };
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
@@ -64,23 +51,6 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
 
   const handleCheckIn = (student: Student) => {
     if (checkingInStudent) return;
-
-    // Check if student has already checked in today
-    if (hasCheckedInToday(student)) {
-      toast.error(
-        `${student.name} has already checked in today! Come back tomorrow for your next class. 🥋`,
-        {
-          duration: 4000,
-          style: {
-            background: '#FF6B6B',
-            color: 'white',
-            fontSize: '16px',
-            fontWeight: 'bold',
-          },
-        }
-      );
-      return;
-    }
 
     // Show confirmation dialog
     setSelectedStudent(student);
