@@ -6,6 +6,7 @@ import StudentCard from './StudentCard';
 import SearchBar from './SearchBar';
 import StudentSignUp from './StudentSignUp';
 import Fireworks from './Fireworks';
+import CheckInConfirmation from './CheckInConfirmation';
 import { Student } from '../types';
 import { getTopStudents } from '../utils/badgeSystem';
 import backgroundImage from '../assets/images/background.png';
@@ -23,9 +24,25 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
   const [checkingInStudent, setCheckingInStudent] = useState<string | null>(null);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
   // Get top 5 students for featured display
   const topStudents = getTopStudents(students, 5);
+
+  // Check if student has already checked in today
+  const hasCheckedInToday = (student: Student): boolean => {
+    if (!student.lastCheckIn) return false;
+    
+    const today = new Date();
+    const lastCheckIn = new Date(student.lastCheckIn);
+    
+    return (
+      today.getFullYear() === lastCheckIn.getFullYear() &&
+      today.getMonth() === lastCheckIn.getMonth() &&
+      today.getDate() === lastCheckIn.getDate()
+    );
+  };
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
@@ -45,21 +62,47 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
     setSearchQuery(query);
   };
 
-  const handleCheckIn = async (student: Student) => {
+  const handleCheckIn = (student: Student) => {
     if (checkingInStudent) return;
 
-    setCheckingInStudent(student.id);
+    // Check if student has already checked in today
+    if (hasCheckedInToday(student)) {
+      toast.error(
+        `${student.name} has already checked in today! Come back tomorrow for your next class. 🥋`,
+        {
+          duration: 4000,
+          style: {
+            background: '#FF6B6B',
+            color: 'white',
+            fontSize: '16px',
+            fontWeight: 'bold',
+          },
+        }
+      );
+      return;
+    }
+
+    // Show confirmation dialog
+    setSelectedStudent(student);
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmCheckIn = async () => {
+    if (!selectedStudent) return;
+
+    setCheckingInStudent(selectedStudent.id);
+    setShowConfirmation(false);
 
     try {
       // Use the Supabase check-in function
-      const updatedStudent = await onCheckInStudent(student.id);
+      const updatedStudent = await onCheckInStudent(selectedStudent.id);
       
       // Show fireworks celebration
       setShowFireworks(true);
       
       // Show success animation and toast
       toast.success(
-        `Welcome ${student.name}! Class #${updatedStudent.classesCount} checked in! 🥋`,
+        `Welcome ${selectedStudent.name}! Class #${updatedStudent.classesCount} checked in! 🥋`,
         {
           duration: 3000,
           style: {
@@ -74,7 +117,13 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
       toast.error('Failed to check in. Please try again.');
     } finally {
       setCheckingInStudent(null);
+      setSelectedStudent(null);
     }
+  };
+
+  const handleCancelCheckIn = () => {
+    setShowConfirmation(false);
+    setSelectedStudent(null);
   };
 
   return (
@@ -211,6 +260,7 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
                   onCheckIn={handleCheckIn}
                   isCheckingIn={checkingInStudent === student.id}
                   isTopStudent={true}
+                  isTappable={false}
                 />
               </motion.div>
             ))}
@@ -240,6 +290,7 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
                     onCheckIn={handleCheckIn}
                     isCheckingIn={checkingInStudent === student.id}
                     isTopStudent={true}
+                    isTappable={false}
                   />
                 </motion.div>
               ))}
@@ -286,6 +337,7 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
                     student={student}
                     onCheckIn={handleCheckIn}
                     isCheckingIn={checkingInStudent === student.id}
+                    isTappable={true}
                   />
                 </motion.div>
               ))}
@@ -324,6 +376,14 @@ const CheckInKiosk: React.FC<CheckInKioskProps> = ({ students, onUpdateStudent, 
       <Fireworks 
         show={showFireworks}
         onComplete={() => setShowFireworks(false)}
+      />
+
+      {/* Check-in Confirmation Dialog */}
+      <CheckInConfirmation
+        isOpen={showConfirmation}
+        student={selectedStudent}
+        onConfirm={handleConfirmCheckIn}
+        onCancel={handleCancelCheckIn}
       />
       
       {/* CSS for shimmer animation */}

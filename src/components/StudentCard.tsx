@@ -9,13 +9,15 @@ interface StudentCardProps {
   onCheckIn: (student: Student) => void;
   isCheckingIn?: boolean;
   isTopStudent?: boolean;
+  isTappable?: boolean;
 }
 
 const StudentCard: React.FC<StudentCardProps> = ({
   student,
   onCheckIn,
   isCheckingIn = false,
-  isTopStudent = false
+  isTopStudent = false,
+  isTappable = true
 }) => {
   const badge = getBadgeForClassCount(student.classesCount);
   
@@ -42,22 +44,24 @@ const StudentCard: React.FC<StudentCardProps> = ({
   return (
     <motion.div
       className="student-card"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={() => onCheckIn(student)}
+      whileHover={isTappable ? { scale: 1.05 } : {}}
+      whileTap={isTappable ? { scale: 0.95 } : {}}
+      onClick={isTappable ? () => onCheckIn(student) : undefined}
       style={{
         borderRadius: '16px',
         padding: '20px',
         textAlign: 'center',
-        cursor: 'pointer',
+        cursor: isTappable ? 'pointer' : 'default',
         transition: 'all 0.3s ease',
         opacity: isCheckingIn ? 0.7 : 1,
         pointerEvents: isCheckingIn ? 'none' : 'auto',
       }}
     >
       <div style={{ position: 'relative', marginBottom: '12px' }}>
-        {/* Chi Energy Bubbles Rising Up - More bubbles with random movements */}
-        <div className="chi-bubble" style={{
+        {/* Chi Energy Bubbles Rising Up - More bubbles with random movements - Only for top students */}
+        {isTopStudent && (
+          <>
+            <div className="chi-bubble" style={{
           position: 'absolute',
           bottom: '20%',
           left: '30%',
@@ -210,6 +214,8 @@ const StudentCard: React.FC<StudentCardProps> = ({
           zIndex: 10,
           border: '1px solid rgba(255, 215, 0, 0.5)',
         }} />
+          </>
+        )}
         
         <motion.div
           className="avatar"
@@ -237,7 +243,6 @@ const StudentCard: React.FC<StudentCardProps> = ({
               height: avatarSize,
               borderRadius: '10%',
               objectFit: 'cover',
-              border: `4px solid ${getBorderColor()}`,
               boxShadow: `
                 0 0 15px ${getBorderColor().replace('0.9', '0.4')},
                 0 0 25px ${getBorderColor().replace('0.9', '0.2')},
@@ -262,7 +267,6 @@ const StudentCard: React.FC<StudentCardProps> = ({
             height: avatarSize,
             borderRadius: '50%',
             background: `linear-gradient(135deg, ${getBorderColor().replace('0.9', '0.3')}, ${getBorderColor().replace('0.9', '0.2')})`,
-            border: `4px solid ${getBorderColor()}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

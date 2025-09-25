@@ -76,14 +76,26 @@ CREATE POLICY "Allow public insert attendance" ON attendance_records
 CREATE POLICY "Allow public read attendance" ON attendance_records
     FOR SELECT USING (true);
 
+-- Allow public student registration (insert new students)
+CREATE POLICY "Allow public student registration" ON students
+    FOR INSERT WITH CHECK (true);
+
+-- Allow public check-ins (update classes_count and last_check_in only)
+CREATE POLICY "Allow public check-ins" ON students
+    FOR UPDATE USING (true)
+    WITH CHECK (true);
+
 -- Admin operations require authentication
--- Allow authenticated users to insert, update, delete students
+-- Allow authenticated users to insert, update, delete students (for admin panel)
 CREATE POLICY "Allow authenticated users to modify students" ON students
     FOR ALL USING (auth.role() = 'authenticated');
 
 -- Storage policies for avatars bucket
 CREATE POLICY "Allow public read access to avatars" ON storage.objects
     FOR SELECT USING (bucket_id = 'avatars');
+
+CREATE POLICY "Allow public upload avatars" ON storage.objects
+    FOR INSERT WITH CHECK (bucket_id = 'avatars');
 
 CREATE POLICY "Allow authenticated users to upload avatars" ON storage.objects
     FOR INSERT WITH CHECK (

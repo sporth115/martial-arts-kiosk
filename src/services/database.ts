@@ -71,12 +71,6 @@ export const studentService = {
 
   // Add new student (admin only)
   async addStudent(student: Omit<Student, 'id'>): Promise<Student> {
-    // Check if user is authenticated
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      throw new Error('Authentication required to add students');
-    }
-
     let avatarUrl = student.avatar;
 
     // If avatar is a blob URL, upload it to Supabase storage
